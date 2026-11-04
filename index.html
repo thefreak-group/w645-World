@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>w645 | Welcome</title>
+    <style>
+        @font-face {
+            font-family: 'Chicago';
+            src: local('Chicago'), local('Charcoal'), sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        body {
+            /* Чуть-чуть серый фон вместо чисто белого */
+            background-color: #e8e8e8;
+            font-family: 'Chicago', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 48px 20px;
+        }
+
+        /* Окно в стиле System 1 */
+        .window {
+            position: relative;
+            max-width: 640px;
+            width: 100%;
+            margin: 0 auto;
+            background: #fff;
+            border: 2px solid #000;
+            box-shadow:
+                4px 4px 0 #000,
+                8px 8px 0 rgba(0, 0, 0, 0.08);
+        }
+
+        .menu-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: #fff;
+    border-bottom: 1px solid #000;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1000;
+}
+
+/* Общий стиль для пунктов меню */
+.menu-item {
+    margin-right: 20px;
+    cursor: pointer;
+    color: #000;
+    text-decoration: none;      /* убираем подчёркивание у <a> */
+    padding: 0 4px;
+    line-height: 18px;
+}
+
+.menu-item:hover {
+    background: #000;
+    color: #fff;                /* инверсия как в System 1 */
+}
+
+.menu-item.apple {
+    font-size: 14px;
+}
+
+/* Чтобы клики на ссылку «File» работали по всей площади */
+.menu-item:focus {
+    outline: 1px dotted #000;
+}
+
+        /* Содержимое */
+        .window-content {
+            padding: 24px;
+            line-height: 1.5;
+        }
+
+        h2 {
+            font-size: 17px;
+            margin: 0 0 14px;
+            border-bottom: 1px dashed #000;
+            padding-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        p { margin: 0 0 12px; }
+
+        ul {
+            margin: 12px 0;
+            padding-left: 22px;
+            list-style-type: square;
+        }
+
+        li { margin-bottom: 7px; }
+
+        .alert-box {
+            border: 2px solid #000;
+            padding: 12px;
+            margin: 20px 0;
+            outline: 1px solid #000;
+            outline-offset: -4px;
+            background: #fff;
+        }
+
+        /* Кнопка в стиле System 1 */
+        .mac-btn {
+            display: block;
+            width: 100%;
+            margin: 22px 0 4px;
+            padding: 8px 14px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: #000;
+            background: #fff;
+            border: 2px solid #000;
+            box-shadow: 2px 2px 0 #000;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: none;
+        }
+
+        .mac-btn:hover { background: #f2f2f2; }
+
+        .mac-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+            background: #000;
+            color: #fff;
+        }
+
+        .window-footer {
+            border-top: 1px dashed #000;
+            padding-top: 10px;
+            margin-top: 22px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 600px) {
+            .window { box-shadow: 3px 3px 0 #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="menu-bar">
+    <a class="menu-item apple" href="index.html" title="Главное меню"></a>
+    <a class="menu-item" href="index.html">Home</a>
+    <a class="menu-item" href="about.html">About</a>
+    </nav>
+
+    <div class="window">
+        <div class="window-content">
+            <h2>w645 - Is a closed form of chess.</h2>
+
+            <p><strong>w645</strong> - This is our local "retro chess" game, where you can play chess against our computer in a pleasant atmosphere and with charming graphic.</p>
+
+            <p>On our website you can already:</p>
+            <ul>
+                <li>To play against each other;</li>
+                <li>Play against the computer;</li>
+                <li>Play in various modes (blitz, bullet, ...).</li>
+            </ul>
+
+            <p>Currently, the site is open exclusively to developers. <strong>w645</strong>.</p>
+
+            <!-- Кнопка перехода на страницу шахмат -->
+            <a class="mac-btn" href="w645.html">▶ Play!</a>
+
+            <div class="window-footer">
+                <div>w645 © 2026</div>
+                <div>a w645 production</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
