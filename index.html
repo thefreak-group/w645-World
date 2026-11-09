@@ -89,12 +89,77 @@
             line-height: 1.5;
         }
 
+        .logo-col {
+            flex: none;
+            width: 190px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-top: 4px;
+        }
+
+        /* Пиксельный логотип — белые буквы с чёрным контуром */
+        .pixel-logo {
+            display: flex;
+            align-items: flex-end;
+            line-height: 1;
+            user-select: none;
+            image-rendering: pixelated;
+        }
+
+        .pixel-logo span {
+            display: inline-block;
+            position: relative;
+            font-family: 'Courier New', 'Consolas', monospace;
+            font-weight: 900;
+            font-size: 56px;
+            color: #fff;
+            letter-spacing: -6px;
+            -webkit-text-stroke: 2px #000;
+            text-shadow:
+                /* Белая заливка-обводка */
+                0 0 0 #fff,
+                /* Чёрный контур по 3px во все стороны */
+                -3px 0 0 #000, 3px 0 0 #000,
+                0 -3px 0 #000, 0 3px 0 #000,
+                -3px -3px 0 #000, 3px -3px 0 #000,
+                -3px 3px 0 #000, 3px 3px 0 #000,
+                /* Пиксельная отбрасываемая тень */
+                6px 6px 0 #000,
+                12px 12px 0 #888;
+        }
+
+        .pixel-logo span:nth-child(1) { transform: translateY(2px); }
+        .pixel-logo span:nth-child(2) { transform: translateY(-2px); }
+        .pixel-logo span:nth-child(3) { transform: translateY(1px); }
+        .pixel-logo span:nth-child(4) { transform: translateY(-1px); }
+
+        .text-col { flex: 1; min-width: 0; }
+
+        /* Основной текст — белый с чёрным контуром */
+        .text-col {
+            color: #fff;
+            -webkit-text-stroke: 1px #000;
+            text-shadow:
+                -1px 0 0 #000, 1px 0 0 #000,
+                0 -1px 0 #000, 0 1px 0 #000,
+                -1px -1px 0 #000, 1px -1px 0 #000,
+                -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
         h2 {
             font-size: 17px;
             margin: 0 0 14px;
             border-bottom: 1px dashed #000;
             padding-bottom: 6px;
             letter-spacing: 0.3px;
+            color: #fff;
+            -webkit-text-stroke: 1.2px #000;
+            text-shadow:
+                -1px 0 0 #000, 1px 0 0 #000,
+                0 -1px 0 #000, 0 1px 0 #000,
+                -1px -1px 0 #000, 1px -1px 0 #000,
+                -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
         p { margin: 0 0 12px; }
@@ -114,9 +179,18 @@
             outline: 1px solid #000;
             outline-offset: -4px;
             background: #fff;
+            color: #000;
+            -webkit-text-stroke: 0;
+            text-shadow: none;
         }
 
-        /* Кнопка в стиле System 1 */
+        .alert-box strong,
+        .alert-box em {
+            color: #000;
+            -webkit-text-stroke: 0;
+            text-shadow: none;
+        }
+
         .mac-btn {
             display: block;
             width: 100%;
@@ -134,10 +208,10 @@
             cursor: pointer;
             letter-spacing: 0.5px;
             transition: none;
+            -webkit-text-stroke: 0;
+            text-shadow: none;
         }
-
         .mac-btn:hover { background: #f2f2f2; }
-
         .mac-btn:active {
             transform: translate(2px, 2px);
             box-shadow: none;
@@ -152,10 +226,29 @@
             font-size: 11px;
             display: flex;
             justify-content: space-between;
+            color: #fff;
+            -webkit-text-stroke: 1px #000;
+            text-shadow:
+                -1px 0 0 #000, 1px 0 0 #000,
+                0 -1px 0 #000, 0 1px 0 #000;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 640px) {
             .window { box-shadow: 3px 3px 0 #000; }
+            .window-content { flex-direction: column; gap: 18px; }
+            .logo-col { width: 100%; padding-top: 0; }
+            .pixel-logo span {
+                font-size: 44px;
+                text-shadow:
+                    0 0 0 #fff,
+                    -2px 0 0 #000, 2px 0 0 #000,
+                    0 -2px 0 #000, 0 2px 0 #000,
+                    -2px -2px 0 #000, 2px -2px 0 #000,
+                    -2px 2px 0 #000, 2px 2px 0 #000,
+                    5px 5px 0 #000,
+                    10px 10px 0 #888;
+            }
+            h2 { -webkit-text-stroke: 1px #000; }
         }
     </style>
 </head>
@@ -169,6 +262,11 @@
 
     <div class="window">
         <div class="window-content">
+            <div class="logo-col">
+                <div class="pixel-logo">
+                    <span>w</span><span>6</span><span>4</span><span>5</span>
+                </div>
+            </div>
             <h2>w645 - Is a closed form of chess.</h2>
 
             <p><strong>w645</strong> - This is our local "retro chess" game, where you can play chess against our computer in a pleasant atmosphere and with charming graphic.</p>
