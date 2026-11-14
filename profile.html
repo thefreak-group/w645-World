@@ -29,11 +29,47 @@
             padding: 48px 20px;
         }
 
+        /* Верхнее меню */
+        .menu-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: #fff;
+            border-bottom: 1px solid #000;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        .menu-item {
+            margin-right: 20px;
+            cursor: pointer;
+            color: #000;
+            text-decoration: none;
+            padding: 0 4px;
+            line-height: 18px;
+        }
+
+        .menu-item:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .menu-item.apple { font-size: 14px; }
+
+        .menu-item:focus { outline: 1px dotted #000; }
+
+        /* Окно */
         .window {
             position: relative;
             max-width: 760px;
             width: 100%;
-            margin: 0 auto;
+            margin: 12px auto 0;
             background: #fff;
             border: 2px solid #000;
             box-shadow:
@@ -128,7 +164,6 @@
             align-items: flex-start;
         }
 
-        /* Left column: avatar + nickname */
         .left-col {
             flex: none;
             width: 190px;
@@ -136,7 +171,6 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
-            /* Avatar slightly overlaps the banner, like on social networks */
             margin-top: -80px;
             position: relative;
             z-index: 3;
@@ -195,6 +229,26 @@
             background: #fff;
         }
 
+        /* Страна под ником */
+        .country-display {
+            width: 100%;
+            font-size: 12px;
+            color: #333;
+            text-align: center;
+            letter-spacing: 0.3px;
+            min-height: 16px;
+            line-height: 1.3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .country-display .flag {
+            font-size: 18px;
+            line-height: 1;
+        }
+        .country-display:empty { display: none; }
+
         /* Right column: profile form */
         .right-col {
             flex: 1;
@@ -212,7 +266,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* Local profile form */
         .profile-form {
             display: flex;
             flex-direction: column;
@@ -244,6 +297,11 @@
             outline: none;
             box-shadow: 1px 1px 0 #000;
             color: #000;
+        }
+
+        .field select {
+            cursor: pointer;
+            padding: 6px 7px;
         }
 
         .field textarea {
@@ -315,117 +373,6 @@
             justify-content: space-between;
         }
 
-        .menu-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 20px;
-    background: #fff;
-    border-bottom: 1px solid #000;
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-    font-size: 12px;
-    font-weight: bold;
-    z-index: 1000;
-}
-
-/* Общий стиль для пунктов меню */
-.menu-item {
-    margin-right: 20px;
-    cursor: pointer;
-    color: #000;
-    text-decoration: none;      /* убираем подчёркивание у <a> */
-    padding: 0 4px;
-    line-height: 18px;
-}
-
-.menu-item:hover {
-    background: #000;
-    color: #fff;                /* инверсия как в System 1 */
-}
-
-.menu-item.apple {
-    font-size: 14px;
-}
-
-/* Чтобы клики на ссылку «File» работали по всей площади */
-.menu-item:focus {
-    outline: 1px dotted #000;
-}
-
-        /* Содержимое */
-        .window-content {
-            padding: 24px;
-            line-height: 1.5;
-        }
-
-        h2 {
-            font-size: 17px;
-            margin: 0 0 14px;
-            border-bottom: 1px dashed #000;
-            padding-bottom: 6px;
-            letter-spacing: 0.3px;
-        }
-
-        p { margin: 0 0 12px; }
-
-        ul {
-            margin: 12px 0;
-            padding-left: 22px;
-            list-style-type: square;
-        }
-
-        li { margin-bottom: 7px; }
-
-        .alert-box {
-            border: 2px solid #000;
-            padding: 12px;
-            margin: 20px 0;
-            outline: 1px solid #000;
-            outline-offset: -4px;
-            background: #fff;
-        }
-
-        /* Кнопка в стиле System 1 */
-        .mac-btn {
-            display: block;
-            width: 100%;
-            margin: 22px 0 4px;
-            padding: 8px 14px;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            color: #000;
-            background: #fff;
-            border: 2px solid #000;
-            box-shadow: 2px 2px 0 #000;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: none;
-        }
-
-        .mac-btn:hover { background: #f2f2f2; }
-
-        .mac-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: none;
-            background: #000;
-            color: #fff;
-        }
-
-        .window-footer {
-            border-top: 1px dashed #000;
-            padding-top: 10px;
-            margin-top: 22px;
-            font-size: 11px;
-            display: flex;
-            justify-content: space-between;
-        }
-
         /* Responsive */
         @media (max-width: 680px) {
             .window { box-shadow: 3px 3px 0 #000; }
@@ -441,12 +388,12 @@
 </head>
 <body>
 
-     <nav class="menu-bar">
-    <a class="menu-item apple" href="index.html" title="Главное меню"></a>
-    <a class="menu-item" href="index.html">Home</a>
-    <a class="menu-item" href="debuts.html">Debuts</a>
-    <a class="menu-item" href="profile.html">Profile </a>
-    <a class="menu-item" href="about.html">About</a>
+    <nav class="menu-bar">
+        <a class="menu-item apple" href="index.html" title="Главное меню"></a>
+        <a class="menu-item" href="index.html">Home</a>
+        <a class="menu-item" href="debuts.html">Debuts</a>
+        <a class="menu-item" href="profile.html">Profile</a>
+        <a class="menu-item" href="about.html">About</a>
     </nav>
 
     <div class="window">
@@ -466,7 +413,7 @@
 
         <div class="window-content">
 
-            <!-- Left column: avatar + nickname -->
+            <!-- Left column -->
             <div class="left-col">
                 <div class="avatar-box" id="avatarBox" title="Click to choose an avatar">
                     <div class="avatar-placeholder" id="avatarPlaceholder">
@@ -477,6 +424,7 @@
                 <input type="file" id="avatarInput" accept="image/*" hidden>
 
                 <div class="nickname" id="nickname">no nickname</div>
+                <div class="country-display" id="countryDisplay"></div>
                 <button class="mac-btn btn-save" type="button" id="changeNickBtn">Change nickname</button>
 
                 <div class="avatar-hint">
@@ -484,7 +432,7 @@
                 </div>
             </div>
 
-            <!-- Right column: profile form -->
+            <!-- Right column -->
             <div class="right-col">
                 <div>
                     <h2>Local Profile</h2>
@@ -519,6 +467,44 @@
                             </select>
                         </div>
 
+                        <!-- Where are you from? с флажками -->
+                        <div class="field">
+                            <label for="pfCountry">Where are you from?</label>
+                            <select id="pfCountry">
+                                <option value="">— not selected —</option>
+                                <option value="🇷🇺 Russia">🇷🇺 Russia</option>
+                                <option value="🇺🇸 USA">🇺🇸 USA</option>
+                                <option value="🇩🇪 Germany">🇩🇪 Germany</option>
+                                <option value="🇫🇷 France">🇫🇷 France</option>
+                                <option value="🇬🇧 United Kingdom">🇬🇧 United Kingdom</option>
+                                <option value="🇮🇹 Italy">🇮🇹 Italy</option>
+                                <option value="🇪🇸 Spain">🇪🇸 Spain</option>
+                                <option value="🇧🇷 Brazil">🇧🇷 Brazil</option>
+                                <option value="🇦🇷 Argentina">🇦🇷 Argentina</option>
+                                <option value="🇮🇳 India">🇮🇳 India</option>
+                                <option value="🇨🇳 China">🇨🇳 China</option>
+                                <option value="🇯🇵 Japan">🇯🇵 Japan</option>
+                                <option value="🇰🇿 Kazakhstan">🇰🇿 Kazakhstan</option>
+                                <option value="🇧🇾 Belarus">🇧🇾 Belarus</option>
+                                <option value="🇺🇦 Ukraine">🇺🇦 Ukraine</option>
+                                <option value="🇵🇱 Poland">🇵🇱 Poland</option>
+                                <option value="🇳🇱 Netherlands">🇳🇱 Netherlands</option>
+                                <option value="🇸🇪 Sweden">🇸🇪 Sweden</option>
+                                <option value="🇳🇴 Norway">🇳🇴 Norway</option>
+                                <option value="🇫🇮 Finland">🇫🇮 Finland</option>
+                                <option value="🇨🇦 Canada">🇨🇦 Canada</option>
+                                <option value="🇲🇽 Mexico">🇲🇽 Mexico</option>
+                                <option value="🇦🇺 Australia">🇦🇺 Australia</option>
+                                <option value="🇰🇷 South Korea">🇰🇷 South Korea</option>
+                                <option value="🇹🇷 Turkey">🇹🇷 Turkey</option>
+                                <option value="🇬🇪 Georgia">🇬🇪 Georgia</option>
+                                <option value="🇦🇲 Armenia">🇦🇲 Armenia</option>
+                                <option value="🇮🇱 Israel">🇮🇱 Israel</option>
+                                <option value="🇿🇦 South Africa">🇿🇦 South Africa</option>
+                                <option value="🌍 Other">🌍 Other</option>
+                            </select>
+                        </div>
+
                         <div class="save-row">
                             <button class="mac-btn btn-save" type="submit">Save profile</button>
                             <span class="save-status" id="saveStatus">Saved</span>
@@ -529,12 +515,10 @@
                 <a class="mac-btn" href="w645.html">▶ Play!</a>
 
                 <div class="window-footer">
-                <div>w645 © 2026</div>
-                <div>a blueCherry production</div>
+                    <div>w645 © 2026</div>
+                    <div>a w645 production</div>
+                </div>
             </div>
-        </div>
-    </div>
-
         </div>
     </div>
 
@@ -549,12 +533,14 @@
         const pfOpening         = document.getElementById('pfOpening');
         const pfPlayer          = document.getElementById('pfPlayer');
         const pfTime            = document.getElementById('pfTime');
+        const pfCountry         = document.getElementById('pfCountry');
         const saveStatus        = document.getElementById('saveStatus');
         const avatarBox         = document.getElementById('avatarBox');
         const avatarPlaceholder = document.getElementById('avatarPlaceholder');
         const avatarImg         = document.getElementById('avatarImg');
         const avatarInput       = document.getElementById('avatarInput');
         const nicknameEl        = document.getElementById('nickname');
+        const countryDisplay    = document.getElementById('countryDisplay');
         const changeNickBtn     = document.getElementById('changeNickBtn');
 
         const bannerBox         = document.getElementById('bannerBox');
@@ -568,6 +554,7 @@
             opening: '',
             player: '',
             time: '',
+            country: '',
             nickname: '',
             avatar: '',
             banner: ''
@@ -603,14 +590,36 @@
             }
         }
 
+        // Рендер страны с флажком под ником
+        function renderCountryUnderNick() {
+            countryDisplay.innerHTML = '';
+            if (!profile.country) return;
+            // profile.country = "🇷🇺 Russia"
+            const parts = profile.country.split(' ');
+            const flag = parts[0] || '';
+            const name = parts.slice(1).join(' ') || '';
+
+            const flagSpan = document.createElement('span');
+            flagSpan.className = 'flag';
+            flagSpan.textContent = flag;
+            countryDisplay.appendChild(flagSpan);
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+            countryDisplay.appendChild(nameSpan);
+        }
+
         function renderProfile() {
             pfAbout.value   = profile.about   || '';
             pfOpening.value = profile.opening || '';
             pfPlayer.value  = profile.player  || '';
             pfTime.value    = profile.time    || '';
+            pfCountry.value = profile.country || '';
 
             nicknameEl.textContent = profile.nickname || 'no nickname';
             nicknameEl.title = profile.nickname || '';
+
+            renderCountryUnderNick();
 
             if (profile.avatar) {
                 avatarImg.src = profile.avatar;
@@ -640,7 +649,9 @@
             profile.opening = pfOpening.value.trim();
             profile.player  = pfPlayer.value.trim();
             profile.time    = pfTime.value;
+            profile.country = pfCountry.value;
             saveProfile();
+            renderCountryUnderNick();
         });
 
         changeNickBtn.addEventListener('click', () => {
@@ -699,7 +710,6 @@
 
         // ---------- Banner ----------
         bannerBox.addEventListener('click', (e) => {
-            // Clicking "Remove" must not open the file picker
             if (e.target === bannerRemove) return;
             bannerInput.click();
         });
@@ -719,21 +729,18 @@
             reader.onload = () => {
                 const img = new Image();
                 img.onload = () => {
-                    // Compress to 1600×400 (wide format), cropped from center
                     const W = 1600;
                     const H = 400;
                     const canvas = document.createElement('canvas');
                     canvas.width = W;
                     canvas.height = H;
                     const ctx = canvas.getContext('2d');
-
                     const scale = Math.max(W / img.width, H / img.height);
                     const drawW = img.width * scale;
                     const drawH = img.height * scale;
                     const dx = (W - drawW) / 2;
                     const dy = (H - drawH) / 2;
                     ctx.drawImage(img, dx, dy, drawW, drawH);
-
                     const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
                     profile.banner = dataUrl;
                     bannerImg.src = dataUrl;
