@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>w645 | Devlog</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+    * {
+        box-sizing: border-box;
+        image-rendering: pixelated;
+    }
+
+    html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+    }
+
+    body {
+        background-color: #e8e8e8;
+        font-family: 'Courier Prime', Monaco, 'Courier New', monospace;
+        font-size: 13px;
+        color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 48px 20px;
+    }
+
+    .window {
+        position: relative;
+        max-width: 760px;
+        width: 100%;
+        margin: 0 auto;
+        background: #fff;
+        border: 2px solid #000;
+        box-shadow:
+            4px 4px 0 #000,
+            8px 8px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .window-content {
+        padding: 24px;
+        line-height: 1.5;
+    }
+
+    h1 {
+        font-size: 16px;
+        margin: 0 0 4px;
+        border-bottom: 1px dashed #000;
+        padding-bottom: 6px;
+        letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+        font-size: 11px;
+        color: #555;
+        margin: 0 0 18px;
+    }
+
+    /* ============================================
+       ПАНЕЛЬ АВТОРА (свернута по умолчанию)
+       ============================================ */
+    .author-panel {
+        border: 2px solid #000;
+        background: #f7f7f7;
+        margin-bottom: 22px;
+        box-shadow: 2px 2px 0 #000;
+    }
+
+    .author-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        cursor: pointer;
+        user-select: none;
+        border-bottom: 1px dashed #999;
+    }
+
+    .author-header strong {
+        font-size: 12px;
+        letter-spacing: 0.3px;
+    }
+
+    .author-toggle {
+        font-size: 11px;
+        color: #555;
+    }
+
+    .author-body {
+        padding: 12px;
+        display: none;
+    }
+    .author-panel.open .author-body { display: block; }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        margin-bottom: 10px;
+    }
+
+    .field label {
+        font-size: 11px;
+        font-weight: bold;
+        letter-spacing: 0.3px;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+        width: 100%;
+        font-family: inherit;
+        font-size: 12px;
+        padding: 6px 8px;
+        border: 1px solid #000;
+        border-radius: 0;
+        background: #fff;
+        outline: none;
+        box-shadow: 1px 1px 0 #000;
+        color: #000;
+    }
+
+    .field textarea {
+        resize: vertical;
+        min-height: 90px;
+        max-height: 300px;
+        line-height: 1.5;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus { background: #f7f7f7; }
+
+    .field-row {
+        display: flex;
+        gap: 10px;
+    }
+    .field-row .field { flex: 1; }
+
+    .mac-btn {
+        display: inline-block;
+        padding: 6px 12px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        color: #000;
+        background: #fff;
+        border: 2px solid #000;
+        box-shadow: 2px 2px 0 #000;
+        cursor: pointer;
+        letter-spacing: 0.3px;
+    }
+    .mac-btn:hover { background: #f2f2f2; }
+    .mac-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: none;
+        background: #000;
+        color: #fff;
+    }
+
+    .mac-btn-block {
+        display: block;
+        width: 100%;
+        margin: 22px 0 4px;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    .form-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    .save-status {
+        font-size: 10px;
+        color: #555;
+        opacity: 0;
+        transition: opacity 0.25s;
+    }
+    .save-status.show { opacity: 1; }
+
+    /* ============================================
+       ЛЕНТА ОБНОВЛЕНИЙ
+       ============================================ */
+    .devlog-list {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .devlog-item {
+        border: 2px solid #000;
+        box-shadow: 2px 2px 0 #000;
+        background: #fff;
+        position: relative;
+    }
+
+    .devlog-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+        padding: 8px 12px;
+        background: #000;
+        color: #fff;
+    }
+
+    .devlog-version {
+        font-size: 13px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+
+    .devlog-date {
+        font-size: 10px;
+        opacity: 0.8;
+        white-space: nowrap;
+    }
+
+    .devlog-body {
+        padding: 12px;
+    }
+
+    .devlog-title {
+        font-size: 14px;
+        font-weight: bold;
+        margin: 0 0 6px;
+        letter-spacing: 0.2px;
+        word-wrap: break-word;
+    }
+
+    .devlog-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 8px;
+    }
+
+    .devlog-tag {
+        font-size: 9px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+        padding: 1px 6px;
+        border: 1px solid #000;
+        background: #f2f2f2;
+        text-transform: uppercase;
+    }
+    .devlog-tag.feat  { background: #d4f5d4; }
+    .devlog-tag.fix   { background: #ffe1e1; }
+    .devlog-tag.bal   { background: #fff5cc; }
+    .devlog-tag.perf  { background: #e1ecff; }
+    .devlog-tag.ui    { background: #f0e1ff; }
+
+    .devlog-text {
+        font-size: 12px;
+        line-height: 1.55;
+        margin: 0 0 10px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .devlog-delete {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        background: #fff;
+        border: 1px solid #000;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 1px 5px;
+        cursor: pointer;
+        font-family: inherit;
+        display: none;
+        z-index: 2;
+    }
+    .devlog-item:hover .devlog-delete { display: block; }
+    .devlog-delete:hover { background: #000; color: #fff; }
+
+    /* Комментарии */
+    .devlog-comments {
+        border-top: 1px dashed #000;
+        background: #fafafa;
+        padding: 10px 12px;
+    }
+
+    .comments-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        letter-spacing: 0.3px;
+    }
+
+    .comments-toggle {
+        font-size: 10px;
+        font-weight: normal;
+        color: #555;
+        cursor: pointer;
+        user-select: none;
+        border: 1px solid #000;
+        padding: 1px 6px;
+        background: #fff;
+    }
+    .comments-toggle:hover { background: #000; color: #fff; }
+
+    .comments-list {
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px;
+        max-height: 260px;
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+    .comments-list.open { display: flex; }
+
+    .comment {
+        border-left: 3px solid #000;
+        padding: 4px 8px;
+        background: #fff;
+    }
+
+    .comment-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+        margin-bottom: 2px;
+    }
+
+    .comment-author {
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .comment-date {
+        font-size: 9px;
+        color: #666;
+        white-space: nowrap;
+    }
+
+    .comment-text {
+        font-size: 11px;
+        line-height: 1.45;
+        margin: 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .comment-delete {
+        background: none;
+        border: none;
+        font-size: 10px;
+        color: #999;
+        cursor: pointer;
+        font-family: inherit;
+        padding: 0 4px;
+    }
+    .comment-delete:hover { color: #000; text-decoration: underline; }
+
+    .comment-empty {
+        font-size: 10px;
+        color: #888;
+        font-style: italic;
+    }
+
+    /* Форма комментария */
+    .comment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .comment-form-row {
+        display: flex;
+        gap: 6px;
+        align-items: flex-start;
+    }
+
+    .comment-form input[type="text"] {
+        flex: none;
+        width: 130px;
+        font-family: inherit;
+        font-size: 11px;
+        padding: 4px 6px;
+        border: 1px solid #000;
+        background: #fff;
+        outline: none;
+        box-shadow: 1px 1px 0 #000;
+    }
+
+    .comment-form textarea {
+        flex: 1;
+        font-family: inherit;
+        font-size: 11px;
+        padding: 4px 6px;
+        border: 1px solid #000;
+        background: #fff;
+        outline: none;
+        box-shadow: 1px 1px 0 #000;
+        resize: vertical;
+        min-height: 36px;
+        max-height: 100px;
+    }
+
+    .comment-form button {
+        flex: none;
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: bold;
+        padding: 4px 10px;
+        border: 1px solid #000;
+        background: #fff;
+        cursor: pointer;
+        box-shadow: 1px 1px 0 #000;
+        align-self: stretch;
+    }
+    .comment-form button:hover { background: #000; color: #fff; }
+    .comment-form button:active {
+        transform: translate(1px, 1px);
+        box-shadow: none;
+    }
+
+    .empty-state {
+        text-align: center;
+        font-size: 12px;
+        color: #666;
+        padding: 30px 10px;
+        border: 1px dashed #999;
+    }
+
+    .window-footer {
+        border-top: 1px dashed #000;
+        padding-top: 10px;
+        margin-top: 22px;
+        font-size: 11px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .menu-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: #fff;
+    border-bottom: 1px solid #000;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 1000;
+}
+
+/* Общий стиль для пунктов меню */
+.menu-item {
+    margin-right: 20px;
+    cursor: pointer;
+    color: #000;
+    text-decoration: none;      /* убираем подчёркивание у <a> */
+    padding: 0 4px;
+    line-height: 18px;
+}
+
+.menu-item:hover {
+    background: #000;
+    color: #fff;                /* инверсия как в System 1 */
+}
+
+.menu-item.apple {
+    font-size: 14px;
+}
+
+/* Чтобы клики на ссылку «File» работали по всей площади */
+.menu-item:focus {
+    outline: 1px dotted #000;
+}
+
+        /* Содержимое */
+        .window-content {
+            padding: 24px;
+            line-height: 1.5;
+        }
+
+        h2 {
+            font-size: 17px;
+            margin: 0 0 14px;
+            border-bottom: 1px dashed #000;
+            padding-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        p { margin: 0 0 12px; }
+
+        ul {
+            margin: 12px 0;
+            padding-left: 22px;
+            list-style-type: square;
+        }
+
+        li { margin-bottom: 7px; }
+
+        .alert-box {
+            border: 2px solid #000;
+            padding: 12px;
+            margin: 20px 0;
+            outline: 1px solid #000;
+            outline-offset: -4px;
+            background: #fff;
+        }
+
+        /* Кнопка в стиле System 1 */
+        .mac-btn {
+            display: block;
+            width: 100%;
+            margin: 22px 0 4px;
+            padding: 8px 14px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: #000;
+            background: #fff;
+            border: 2px solid #000;
+            box-shadow: 2px 2px 0 #000;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: none;
+        }
+
+        .mac-btn:hover { background: #f2f2f2; }
+
+        .mac-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+            background: #000;
+            color: #fff;
+        }
+
+        .window-footer {
+            border-top: 1px dashed #000;
+            padding-top: 10px;
+            margin-top: 22px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+    @media (max-width: 640px) {
+        .window { box-shadow: 3px 3px 0 #000; }
+        .devlog-head { flex-direction: column; align-items: flex-start; gap: 2px; }
+        .field-row { flex-direction: column; gap: 0; }
+        .comment-form-row { flex-direction: column; align-items: stretch; }
+        .comment-form input[type="text"] { width: 100%; }
+    }
+</style>
+</head>
+<body>
+
+
+    <nav class="menu-bar">
+    <a class="menu-item apple" href="index.html" title="Главное меню"></a>
+    <a class="menu-item" href="index.html">Home</a>
+    <a class="menu-item" href="debuts.html">Debuts</a>
+    <a class="menu-item" href="profile.html">Profile </a>
+    <a class="menu-item" href="about.html">About</a>
+    </nav>
+
+    
+<div class="window">
+    <div class="window-content">
+        <h1>Devlog w645</h1>
+        <p class="subtitle">Обновления сайта, новые фичи, исправления. Оставляйте комментарии под каждым постом.</p>
+
+        <!-- ============================================
+             ПАНЕЛЬ АВТОРА
+             ============================================ -->
+        <div class="author-panel" id="authorPanel">
+            <div class="author-header" id="authorHeader">
+                <strong>Панель автора</strong>
+                <span class="author-toggle" id="authorToggle">показать ▼</span>
+            </div>
+            <div class="author-body">
+                <form id="devlogForm" autocomplete="off">
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="dlVersion">Версия</label>
+                            <input id="dlVersion" type="text" maxlength="12" placeholder="v1.4" required>
+                        </div>
+                        <div class="field">
+                            <label for="dlTitle">Заголовок</label>
+                            <input id="dlTitle" type="text" maxlength="80" placeholder="Что нового" required>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="dlText">Описание изменений</label>
+                        <textarea id="dlText" maxlength="2000" placeholder="Что добавлено, что исправлено, что изменилось..." required></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="dlTags">Теги (через запятую)</label>
+                        <input id="dlTags" type="text" maxlength="80" placeholder="feat, fix, ui">
+                    </div>
+
+                    <div class="form-row">
+                        <button class="mac-btn" type="submit">Опубликовать обновление</button>
+                        <span class="save-status" id="publishStatus">Опубликовано</span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ============================================
+             ЛЕНТА ОБНОВЛЕНИЙ
+             ============================================ -->
+        <div class="devlog-list" id="devlogList"></div>
+
+        <a class="mac-btn mac-btn-block" href="index.html">◀ На главную</a>
+
+        <div class="window-footer">
+            <div>w645 © 2026</div>
+            <div>a [w645] group production</div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    "use strict";
+
+    const STORAGE_KEY = 'w645_devlog_v1';
+    const MAX_POSTS = 100;
+    const MAX_COMMENTS_PER_POST = 100;
+
+    const authorPanel   = document.getElementById('authorPanel');
+    const authorHeader  = document.getElementById('authorHeader');
+    const authorToggle  = document.getElementById('authorToggle');
+    const devlogForm    = document.getElementById('devlogForm');
+    const dlVersion     = document.getElementById('dlVersion');
+    const dlTitle       = document.getElementById('dlTitle');
+    const dlText        = document.getElementById('dlText');
+    const dlTags        = document.getElementById('dlTags');
+    const publishStatus = document.getElementById('publishStatus');
+    const devlogList    = document.getElementById('devlogList');
+
+    let posts = [];
+
+    // ---------- Хранилище ----------
+    function loadPosts() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            const parsed = raw ? JSON.parse(raw) : [];
+            posts = Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            posts = [];
+        }
+    }
+
+    function savePosts() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(posts.slice(0, MAX_POSTS)));
+        } catch (e) {
+            console.warn('Не удалось сохранить devlog:', e);
+        }
+    }
+
+    // ---------- Утилиты ----------
+    function escapeHtml(s) {
+        return String(s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function formatDate(iso) {
+        try {
+            const d = new Date(iso);
+            const pad = n => String(n).padStart(2, '0');
+            return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        } catch (e) {
+            return '';
+        }
+    }
+
+    function uid(prefix) {
+        return (prefix || 'id') + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+    }
+
+    function detectTagClass(tag) {
+        const t = tag.toLowerCase();
+        if (/(feat|new|add|нов)/.test(t)) return 'feat';
+        if (/(fix|bug|исправ|баг)/.test(t)) return 'fix';
+        if (/(bal|balance|баланс)/.test(t)) return 'bal';
+        if (/(perf|speed|быстр|оптимиз)/.test(t)) return 'perf';
+        if (/(ui|design|style|дизайн|стиль)/.test(t)) return 'ui';
+        return '';
+    }
+
+    function parseTags(raw) {
+        if (!raw) return [];
+        return raw.split(',')
+            .map(t => t.trim())
+            .filter(Boolean)
+            .slice(0, 6);
+    }
+
+    // ---------- Рендер ----------
+    function renderPost(post) {
+        const item = document.createElement('div');
+        item.className = 'devlog-item';
+
+        const tagsHtml = (post.tags || []).map(t => {
+            const cls = detectTagClass(t);
+            return `<span class="devlog-tag ${cls}">${escapeHtml(t)}</span>`;
+        }).join('');
+
+        const commentCount = (post.comments || []).length;
+
+        item.innerHTML = `
+            <button class="devlog-delete" type="button" title="Удалить обновление">×</button>
+            <div class="devlog-head">
+                <span class="devlog-version">${escapeHtml(post.version || 'v?')} — ${escapeHtml(post.title)}</span>
+                <span class="devlog-date">${escapeHtml(formatDate(post.date))}</span>
+            </div>
+            <div class="devlog-body">
+                ${tagsHtml ? `<div class="devlog-tags">${tagsHtml}</div>` : ''}
+                <p class="devlog-text">${escapeHtml(post.text)}</p>
+            </div>
+            <div class="devlog-comments">
+                <div class="comments-head">
+                    <span>Комментарии (${commentCount})</span>
+                    <span class="comments-toggle">${commentCount ? 'показать ▼' : 'написать ▼'}</span>
+                </div>
+                <div class="comments-list"></div>
+                <form class="comment-form" autocomplete="off">
+                    <div class="comment-form-row">
+                        <input type="text" name="cAuthor" maxlength="30" placeholder="Ваш ник">
+                        <textarea name="cText" maxlength="500" placeholder="Комментарий..."></textarea>
+                        <button type="submit">Send</button>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        // Удаление поста
+        const delBtn = item.querySelector('.devlog-delete');
+        delBtn.addEventListener('click', () => {
+            if (!confirm('Удалить это обновление и все комментарии?')) return;
+            posts = posts.filter(p => p.id !== post.id);
+            savePosts();
+            renderAll();
+        });
+
+        // Комментарии
+        const commentsList = item.querySelector('.comments-list');
+        const commentsToggle = item.querySelector('.comments-toggle');
+        const commentForm = item.querySelector('.comment-form');
+        const cAuthor = commentForm.querySelector('input[name="cAuthor"]');
+        const cText = commentForm.querySelector('textarea[name="cText"]');
+
+        function renderComments() {
+            commentsList.innerHTML = '';
+            const comments = post.comments || [];
+            if (!comments.length) {
+                const empty = document.createElement('div');
+                empty.className = 'comment-empty';
+                empty.textContent = 'Пока нет комментариев. Будьте первым!';
+                commentsList.appendChild(empty);
+                return;
+            }
+            comments.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'comment';
+                div.innerHTML = `
+                    <div class="comment-head">
+                        <span class="comment-author">${escapeHtml(c.author)}</span>
+                        <span class="comment-date">${escapeHtml(formatDate(c.date))}
+                            <button class="comment-delete" type="button" title="Удалить">×</button>
+                        </span>
+                    </div>
+                    <p class="comment-text">${escapeHtml(c.text)}</p>
+                `;
+                const cdel = div.querySelector('.comment-delete');
+                cdel.addEventListener('click', () => {
+                    if (!confirm('Удалить комментарий?')) return;
+                    post.comments = post.comments.filter(x => x.id !== c.id);
+                    savePosts();
+                    renderComments();
+                    updateCommentCount();
+                });
+                commentsList.appendChild(div);
+            });
+        }
+
+        function updateCommentCount() {
+            const n = (post.comments || []).length;
+            commentsHead.textContent = 'Комментарии (' + n + ')';
+        }
+
+        const commentsHead = item.querySelector('.comments-head span:first-child');
+
+        commentsToggle.addEventListener('click', () => {
+            commentsList.classList.toggle('open');
+            commentsToggle.textContent = commentsList.classList.contains('open')
+                ? 'скрыть ▲'
+                : (commentCount ? 'показать ▼' : 'написать ▼');
+        });
+
+        commentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const author = cAuthor.value.trim().slice(0, 30) || 'Аноним';
+            const text = cText.value.trim().slice(0, 500);
+            if (!text) return;
+
+            if (!post.comments) post.comments = [];
+            if (post.comments.length >= MAX_COMMENTS_PER_POST) {
+                alert('К этому посту уже максимум комментариев.');
+                return;
+            }
+            post.comments.push({
+                id: uid('c'),
+                author,
+                text,
+                date: new Date().toISOString()
+            });
+            savePosts();
+            cText.value = '';
+            renderComments();
+            updateCommentCount();
+        });
+
+        renderComments();
+        devlogList.appendChild(item);
+    }
+
+    function renderAll() {
+        devlogList.innerHTML = '';
+        if (!posts.length) {
+            const empty = document.createElement('div');
+            empty.className = 'empty-state';
+            empty.textContent = 'Пока нет обновлений. Откройте панель автора и опубликуйте первое.';
+            devlogList.appendChild(empty);
+            return;
+        }
+        posts.forEach(renderPost);
+    }
+
+    // ---------- Панель автора ----------
+    authorHeader.addEventListener('click', () => {
+        const open = authorPanel.classList.toggle('open');
+        authorToggle.textContent = open ? 'скрыть ▲' : 'показать ▼';
+    });
+
+    // ---------- Публикация ----------
+    devlogForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const version = dlVersion.value.trim().slice(0, 12) || 'v?';
+        const title = dlTitle.value.trim().slice(0, 80);
+        const text = dlText.value.trim().slice(0, 2000);
+        const tags = parseTags(dlTags.value);
+
+        if (!title || !text) return;
+
+        posts.unshift({
+            id: uid('d'),
+            version,
+            title,
+            text,
+            tags,
+            date: new Date().toISOString(),
+            comments: []
+        });
+        savePosts();
+        renderAll();
+
+        devlogForm.reset();
+        publishStatus.classList.add('show');
+        setTimeout(() => publishStatus.classList.remove('show'), 1400);
+
+        // Свернуть панель после публикации
+        authorPanel.classList.remove('open');
+        authorToggle.textContent = 'показать ▼';
+    });
+
+    // ---------- Старт ----------
+    loadPosts();
+    renderAll();
+})();
+</script>
+
+</body>
+</html>
