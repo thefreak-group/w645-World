@@ -853,7 +853,7 @@
         if (!posts.length) {
             const empty = document.createElement('div');
             empty.className = 'empty-state';
-            empty.textContent = 'Пока нет обновлений. Откройте панель автора и опубликуйте первое.';
+            empty.textContent = 'No updates yet. Open the author panel and publish your first one.';
             devlogList.appendChild(empty);
             return;
         }
@@ -863,7 +863,7 @@
     // ---------- Панель автора ----------
     authorHeader.addEventListener('click', () => {
         const open = authorPanel.classList.toggle('open');
-        authorToggle.textContent = open ? 'скрыть ▲' : 'показать ▼';
+        authorToggle.textContent = open ? 'hide ▲' : 'show ▼';
     });
 
     // ---------- Публикация ----------
@@ -894,7 +894,7 @@
 
         // Свернуть панель после публикации
         authorPanel.classList.remove('open');
-        authorToggle.textContent = 'показать ▼';
+        authorToggle.textContent = 'show ▼';
     });
 
     // ---------- Старт ----------
